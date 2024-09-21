@@ -12,15 +12,15 @@ import { PublicDrop } from "../src/lib/SeaDropStructs.sol";
 contract DeployAndConfigureExampleToken is Script {
     // Addresses
     address seadrop = 0x00005EA00Ac477B1030CE78506496e8C2dE24bf5;
-    address creator = 0x26faf8AE18d15Ed1CA0563727Ad6D4Aa02fb2F80;
-    address feeRecipient = 0x0000a26b00c1F0DF003000390027140000fAa719;
+    address creator = 0x0190f8Ea0234fa3C4d3121F6d13DA3d7c9770fAC;
+    address feeRecipient = 0x0190f8Ea0234fa3C4d3121F6d13DA3d7c9770fAC;
 
     // Token config
     uint256 maxSupply = 100;
 
     // Drop config
     uint16 feeBps = 500; // 5%
-    uint80 mintPrice = 0.0001 ether;
+    uint80 mintPrice = 0.000001 ether;
     uint16 maxTotalMintableByWallet = 5;
 
     function run() external {
@@ -41,24 +41,24 @@ contract DeployAndConfigureExampleToken is Script {
         // Configure the drop parameters.
         token.updateCreatorPayoutAddress(seadrop, creator);
         token.updateAllowedFeeRecipient(seadrop, feeRecipient, true);
-        token.updatePublicDrop(
-            seadrop,
-            PublicDrop(
-                mintPrice,
-                uint48(block.timestamp), // start time
-                uint48(block.timestamp) + 1000, // end time
-                maxTotalMintableByWallet,
-                feeBps,
-                true
-            )
-        );
+        // token.updatePublicDrop(
+        //     seadrop,
+        //     PublicDrop(
+        //         mintPrice,
+        //         uint48(block.timestamp), // start time
+        //         uint48(block.timestamp) + 1000, // end time
+        //         maxTotalMintableByWallet,
+        //         feeBps,
+        //         true
+        //     )
+        // );
 
         // We are ready, let's mint the first 3 tokens!
-        ISeaDrop(seadrop).mintPublic{ value: mintPrice * 3 }(
-            address(token),
-            feeRecipient,
-            address(0),
-            3 // quantity
-        );
+        // ISeaDrop(seadrop).mintPublic{ value: mintPrice * 3 }(
+        //     address(token),
+        //     feeRecipient,
+        //     address(0),
+        //     3 // quantity
+        // );
     }
 }
