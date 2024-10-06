@@ -643,4 +643,17 @@ contract ERC721SeaDrop is
             }
         }
     }
+
+    function ownerMint(address to, uint256 quantity) external onlyOwner {
+        // Check if minting would exceed max supply
+        if (_totalMinted() + quantity > maxSupply()) {
+            revert MintQuantityExceedsMaxSupply(
+                _totalMinted() + quantity,
+                maxSupply()
+            );
+        }
+
+        // Mint the tokens
+        _safeMint(to, quantity);
+    }
 }

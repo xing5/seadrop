@@ -20,8 +20,9 @@ contract DeployAndConfigureExampleToken is Script {
 
     // Drop config
     uint16 feeBps = 500; // 5%
-    uint80 mintPrice = 0.000001 ether;
-    uint16 maxTotalMintableByWallet = 5;
+    uint80 mintPrice = 0.2 ether;
+    uint16 maxTotalMintableByWallet = 1000;
+    uint48 constant ONE_MONTH = 30 days; 
 
     function run() external {
         vm.startBroadcast();
@@ -30,8 +31,8 @@ contract DeployAndConfigureExampleToken is Script {
         allowedSeadrop[0] = seadrop;
 
         ERC721SeaDrop token = new ERC721SeaDrop(
-            "My Example Token",
-            "ExTKN",
+            "Wukong Headband",
+            "WKHB",
             allowedSeadrop
         );
 
@@ -41,17 +42,19 @@ contract DeployAndConfigureExampleToken is Script {
         // Configure the drop parameters.
         token.updateCreatorPayoutAddress(seadrop, creator);
         token.updateAllowedFeeRecipient(seadrop, feeRecipient, true);
-        // token.updatePublicDrop(
-        //     seadrop,
-        //     PublicDrop(
-        //         mintPrice,
-        //         uint48(block.timestamp), // start time
-        //         uint48(block.timestamp) + 1000, // end time
-        //         maxTotalMintableByWallet,
-        //         feeBps,
-        //         true
-        //     )
-        // );
+        token.updatePublicDrop(
+            seadrop,
+            PublicDrop(
+                mintPrice,
+                uint48(block.timestamp), // start time
+                uint48(block.timestamp) + ONE_MONTH, // end time
+                maxTotalMintableByWallet,
+                feeBps,
+                true
+            )
+        );
+
+        token.ownerMint(creator, 10);
 
         // We are ready, let's mint the first 3 tokens!
         // ISeaDrop(seadrop).mintPublic{ value: mintPrice * 3 }(
